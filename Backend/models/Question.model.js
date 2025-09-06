@@ -8,7 +8,7 @@ const questionSchema = new mongoose.Schema(
       ref: "Session",
       required: false,
     },
-    // For quiz questions (renamed to quizQuestions)
+    // For quiz questions 
     quizQuestions: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Quiz",

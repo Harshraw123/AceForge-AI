@@ -29,34 +29,43 @@ const CreateSessionForm = () => {
     e.preventDefault()
     setIsLoading(true)
     setError(null)
-
+  
     try {
       const aiResponse = await axiosInstance.post(API_PATHS.AI.GENERATE_QUESTIONS, {
         role: formData.role,
         experience: formData.experience,
         topicsToFocus: formData.topicsToFocus,
-        description:formData.description,
-        numberOfQuestions: 8,
+        description: formData.description,
+        numberOfQuestions: 5,
       })
+  
+      // aiResponse.data is already [{question, answer}, ...]
+      const generatedQuestions = aiResponse.data || []
+  
+      console.log("Generated Questions:", generatedQuestions)
 
-      const generatedQuestions = aiResponse.data
-      console.log("fuck",aiResponse.data)
-
+      if (!generatedQuestions || generatedQuestions.length === 0) {
+        setError('Failed to generate interview questions. Please try again.');
+        setIsLoading(false);
+        return;
+      }
+  
       const response = await axiosInstance.post(API_PATHS.SESSION.CREATE, {
         ...formData,
-        questions: generatedQuestions,
+        questions: generatedQuestions, // send full objects
       })
-
+  
       if (response.data.session?._id) {
         navigate(`/interview-prep/${response.data.session._id}`)
       }
     } catch (err) {
-      console.error(err)
-      setError('Something went wrong. Please try again.')
+      console.error("Error details:", err.response?.data || err.message)
+      setError(err.response?.data?.message || 'Something went wrong. Please try again.')
     } finally {
       setIsLoading(false)
     }
   }
+  
 
   return (
     <div className="max-w-xl mx-auto mt-10 bg-white shadow-xl rounded-2xl p-6 sm:p-8">
@@ -112,6 +121,7 @@ const CreateSessionForm = () => {
             value={formData.description}
             onChange={handleChange}
             className="w-full border  text-black font-bold  border-gray-300 rounded-lg px-4 py-2 h-24 resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
+            required
           />
         </div>
 

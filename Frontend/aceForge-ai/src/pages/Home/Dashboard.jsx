@@ -22,7 +22,7 @@ const Dashboard = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await axiosInstance.get(API_PATHS.SESSION.GET_ALL_SESSIONS);
+      const response = await axiosInstance.get(API_PATHS.SESSION.GET_ALL);
       if (response.data.success) {
         setSessions(response.data.sessions || []);
       } else {
@@ -89,7 +89,13 @@ const Dashboard = () => {
             </div>
 
             {/* Play Quiz Button */}
-            <div className="flex justify-end mt-2">
+            <div className="flex justify-end mt-2 gap-4">
+              <button
+                onClick={() => navigate('/solve')}
+                className="bg-blue-500 text-white font-semibold px-6 py-2 rounded-lg shadow hover:bg-blue-600 transition"
+              >
+                Practice Problems
+              </button>
               <button
                 onClick={() => navigate('/quiz')}
                 className="bg-yellow-500 text-white font-semibold px-6 py-2 rounded-lg shadow hover:bg-yellow-600 transition"

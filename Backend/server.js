@@ -10,7 +10,8 @@ import aiRoutes from './routes/ai.routes.js';
 import quizRoutes from './routes/quiz.routes.js';
 import codeRoutes from './routes/code.routes.js';
 import aiReview from  './routes/aiReview.routes.js'
-
+import dsaProblems from './routes/dsaProblems.route.js'
+import runDsaCode from './routes/runDsaCode.js'
 
 
 dotenv.config();
@@ -20,7 +21,7 @@ connectDB();
 const app = express();
 
 app.use(cors({
-    origin: 'http://localhost:5173',
+    origin: ['http://localhost:5173', 'https://ace-forge-ai-k6zb.vercel.app'],
     credentials: true,
 }));
 app.use(express.json());
@@ -33,6 +34,8 @@ app.use('/api/ai', aiRoutes);
 app.use('/api/quiz',quizRoutes)
 app.use("/api/code", codeRoutes);
 app.use('/api/review',aiReview)
+app.use('/api/problems',dsaProblems)
+app.use('/api/dsaProblems',runDsaCode)
 
 
 app.get('/', (req, res) => {

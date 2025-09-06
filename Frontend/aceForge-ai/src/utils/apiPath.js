@@ -1,4 +1,4 @@
-export const BASE_URL = "http://localhost:8000";
+export const BASE_URL = "https://ace-forge-ai-backend.vercel.app";
 
 export const API_PATHS = {
   AUTH: {
@@ -32,4 +32,12 @@ export const API_PATHS = {
   REVIEW: {
     AI: "/api/review/ai", // AI code review endpoint
   },
+
+  DSA: {
+    UPDATE: '/api/problems/update',
+    GETDETAILS: '/api/problems/progress'
+  },
+  DSACodeRun: {
+    Run: '/api/dsaProblems/run'
+  }
 };

@@ -10,6 +10,8 @@ import { UserContext } from './context/UserContext'
 import Quiz from './pages/Home/Quiz'
 import QuizInterface from './pages/Home/QuizInterface'
 import CodeEditor from  './pages/Home/CodeEditor'
+import Practice from './pages/Routes/Practice/Practice'
+import Solve from './pages/Routes/Practice/Solve'
 
 // Protected route component
 const ProtectedRoute = ({ children }) => {
@@ -71,6 +73,24 @@ const App = () => {
               </ProtectedRoute>
             } 
           />
+          <Route 
+            path="/solve" 
+            element={
+              <ProtectedRoute>
+                <Practice/>
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/solve/:id" 
+            element={
+              <ProtectedRoute>
+                <Solve/>
+              </ProtectedRoute>
+            } 
+          />
+          
+
         </Routes>
       </Router>
       <Toaster
