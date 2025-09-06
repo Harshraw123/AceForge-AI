@@ -16,7 +16,8 @@ import runDsaCode from './routes/runDsaCode.js'
 
 dotenv.config();
 
-connectDB();
+// Connect to database (non-blocking for Vercel)
+connectDB().catch(console.error);
 
 const app = express();
 
@@ -39,19 +40,30 @@ app.use('/api/dsaProblems',runDsaCode)
 
 
 app.get('/', (req, res) => {
-    res.send('API is running...');
+    res.json({ 
+        message: 'AceForge AI Backend API is running!', 
+        status: 'success',
+        timestamp: new Date().toISOString()
+    });
+});
+
+app.get('/health', (req, res) => {
+    res.json({ 
+        status: 'healthy',
+        message: 'Server is running properly',
+        timestamp: new Date().toISOString()
+    });
 });
 
 
 
 const PORT = process.env.PORT || 8000;
 
-// For Vercel deployment
-if (process.env.NODE_ENV === 'production') {
-    // Export the app for Vercel
-    export default app;
-} else {
-    // Start server locally
+// For Vercel deployment - always export the app
+export default app;
+
+// Start server locally only in development
+if (process.env.NODE_ENV !== 'production') {
     app.listen(PORT, () => {
         console.log(`Server is running on port ${PORT}`);
     });
