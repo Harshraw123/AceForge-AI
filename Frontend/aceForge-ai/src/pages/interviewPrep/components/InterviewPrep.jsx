@@ -210,26 +210,26 @@ const InterviewPrep = () => {
             <FaRegCalendarAlt className="text-yellow-300" />
             <span>Created on: {formatDate(createdAt)}</span>
           </div>
-          <div className="text-gray-700 dark:text-gray-300 italic mb-2 text-sm sm:text-base">{description}</div>
+          <div className="text-white italic mb-2 text-sm sm:text-base">{description}</div>
         </div>
 
         {/* Q&A Section */}
-        <div className="bg-white dark:bg-black rounded-xl shadow p-2 sm:p-6 transition-all duration-300 w-full">
-          <h3 className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6 text-black dark:text-white">AceForge AI Q & A</h3>
+        <div className=" dark:bg-black rounded-xl shadow p-2 sm:p-6 transition-all duration-300 w-full">
+          <h3 className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6 text-white">AceForge AI Q & A</h3>
           <div className="space-y-2 sm:space-y-4">
             {questions.length === 0 && <div className="text-gray-400">No questions found.</div>}
             {questions.map((q, idx) => (
               <div
                 key={q._id || idx}
-                className="border-b border-gray-200 dark:border-gray-700 py-2 sm:py-4"
+                className="border-b text-white border-gray-200 dark:border-gray-700 py-2 sm:py-4"
               >
                 <button
                   className="w-full flex justify-between items-center py-3 sm:py-4 text-left focus:outline-none transition-all duration-200"
                   onClick={() => setExpanded(expanded === idx ? null : idx)}
                 >
                   <span className="flex items-center gap-2 text-base sm:text-lg font-medium text-black dark:text-white">
-                    <span className="bg-gray-100 dark:bg-gray-800 rounded-full px-2 py-1 text-xs font-bold mr-2">Q</span>
-                    <span className="break-words text-left">{q.question}</span>
+                    <span className=" bg-gray-400 rounded-full px-2 py-1 text-xs font-bold mr-2">Q</span>
+                    <span className="break-words text-white text-left">{q.question}</span>
                   </span>
                   <span className="ml-2 sm:ml-4 text-gray-400">{expanded === idx ? '▲' : '▼'}</span>
                 </button>
@@ -237,9 +237,9 @@ const InterviewPrep = () => {
                   <div className="pl-2 sm:pl-8 pb-2 sm:pb-4 text-gray-700 dark:text-gray-200 transition-all duration-300">
                     <div className="flex items-center gap-2 mb-2">
                       <span className="bg-amber-100 dark:bg-amber-900 rounded-full px-2 py-1 text-xs font-bold mr-2 text-amber-700 dark:text-amber-300">A</span>
-                      <span className="font-semibold">Answer:</span>
+                      <span className="font-semibold text-white">Answer:</span>
                     </div>
-                    <div className="w-full px-1 sm:px-6 prose prose-xs sm:prose-sm dark:prose-invert max-w-none overflow-x-auto rounded-md bg-gray-50 dark:bg-gray-900/60 border border-gray-100 dark:border-gray-800">
+                    <div className="w-full font-bold text-white px-1 sm:px-6 prose prose-xs sm:prose-sm prose-invert max-w-none overflow-x-auto rounded-md ">
                       <ReactMarkdown rehypePlugins={[rehypeHighlight]}>
                         {q.answer?.replace(/\\n/g, '\n').replace(/\\t/g, '  ')}
                       </ReactMarkdown>

@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
+import { BrowserRouter, HashRouter, Routes, Route, Navigate } from 'react-router-dom'
 import Login from './pages/Auth/Login'
 import SignUp from './pages/Auth/SignUp'
 import LandingPage from './pages/Home/LandingPage'
@@ -32,10 +32,16 @@ const ProtectedRoute = ({ children }) => {
   return children;
 };
 
+const AppRouter = ({ children }) => {
+  const isDev = typeof window !== 'undefined' && window.location.hostname === 'localhost';
+  const RouterImpl = isDev ? BrowserRouter : HashRouter;
+  return <RouterImpl>{children}</RouterImpl>;
+};
+
 const App = () => {
   return (
     <div>
-      <Router>
+      <AppRouter>
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<Login />} />
@@ -69,7 +75,7 @@ const App = () => {
             path="/code-editor" 
             element={
               <ProtectedRoute>
-                <CodeEditor />
+                {/* <CodeEditor /> */}
               </ProtectedRoute>
             } 
           />
@@ -92,7 +98,7 @@ const App = () => {
           
 
         </Routes>
-      </Router>
+      </AppRouter>
       <Toaster
         toastOptions={{
           className:"",

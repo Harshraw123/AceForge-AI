@@ -1,4 +1,5 @@
-export const BASE_URL = "https://ace-forge-ai-backend.vercel.app";
+export const BASE_URL = import.meta.env.VITE_API_URL || "https://ace-forge-ai-backend.vercel.app";
+
 
 export const API_PATHS = {
   AUTH: {
