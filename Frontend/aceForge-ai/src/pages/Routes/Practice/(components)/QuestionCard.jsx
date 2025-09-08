@@ -35,7 +35,7 @@ export function QuestionCard({ question, onClick }) {
 
   return (
     <Card 
-      className="question-card group cursor-pointer"
+      className="question-card group cursor-pointer border border-yellow-500/30 bg-gray-900 hover:bg-gray-900/80 hover:border-yellow-400/80 hover:shadow-lg hover:shadow-yellow-500/10 transition-colors duration-200 rounded-xl"
       onClick={onClick}
     >
       <CardHeader className="pb-3">
@@ -43,12 +43,12 @@ export function QuestionCard({ question, onClick }) {
           <div className="flex items-center gap-3">
             <div className={cn("shrink-0", getStatusIndicator(question.status))} />
             <div className="flex-1 min-w-0">
-              <CardTitle className="text-lg group-hover:text-primary transition-colors truncate">
+              <CardTitle className="text-lg text-white group-hover:text-yellow-300 transition-colors truncate">
                 {question.title}
               </CardTitle>
               <div className="flex items-center gap-2 mt-2">
                 <DifficultyBadge difficulty={question.difficulty} />
-                <span className="text-xs text-muted-foreground">
+                <span className="text-xs text-gray-400">
                   {question.acceptance}% acceptance
                 </span>
               </div>
@@ -62,18 +62,18 @@ export function QuestionCard({ question, onClick }) {
       </CardHeader>
       
       <CardContent className="pt-0">
-        <CardDescription className="text-sm line-clamp-2 mb-3">
+        <CardDescription className="text-sm text-gray-300 line-clamp-2 mb-3">
           {question.description.slice(0, UI_CONFIG.DESCRIPTION_PREVIEW_LENGTH)}...
         </CardDescription>
         
         <div className="flex flex-wrap gap-1">
           {question.topics.slice(0, UI_CONFIG.MAX_VISIBLE_TOPICS).map((topic) => (
-            <Badge key={topic} variant="secondary" className="topic-tag text-xs">
+            <Badge key={topic} variant="secondary" className="topic-tag text-xs bg-yellow-500/20 text-yellow-300 border border-yellow-500/30">
               {topic}
             </Badge>
           ))}
           {question.topics.length > UI_CONFIG.MAX_VISIBLE_TOPICS && (
-            <Badge variant="secondary" className="topic-tag text-xs">
+            <Badge variant="secondary" className="topic-tag text-xs bg-yellow-500/20 text-yellow-300 border border-yellow-500/30">
               +{question.topics.length - UI_CONFIG.MAX_VISIBLE_TOPICS}
             </Badge>
           )}

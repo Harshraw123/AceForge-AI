@@ -25,6 +25,11 @@ const CreateSessionForm = () => {
     }))
   }
 
+  const safeNumber = (val) => {
+    const n = Number(String(val).match(/\d+/)?.[0] || 0);
+    return isNaN(n) ? 0 : n;
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     setIsLoading(true)
@@ -33,14 +38,16 @@ const CreateSessionForm = () => {
     try {
       const aiResponse = await axiosInstance.post(API_PATHS.AI.GENERATE_QUESTIONS, {
         role: formData.role,
-        experience: formData.experience,
+        experience: safeNumber(formData.experience),
         topicsToFocus: formData.topicsToFocus,
         description: formData.description,
         numberOfQuestions: 5,
       })
   
-      // aiResponse.data is already [{question, answer}, ...]
-      const generatedQuestions = aiResponse.data || []
+      // aiResponse may return array or {raw}
+      const generatedQuestions = Array.isArray(aiResponse.data) ? aiResponse.data
+        : Array.isArray(aiResponse.data?.questions) ? aiResponse.data.questions
+        : []
   
       console.log("Generated Questions:", generatedQuestions)
 
@@ -51,7 +58,10 @@ const CreateSessionForm = () => {
       }
   
       const response = await axiosInstance.post(API_PATHS.SESSION.CREATE, {
-        ...formData,
+        role: formData.role,
+        experience: safeNumber(formData.experience),
+        topicsToFocus: formData.topicsToFocus,
+        description: formData.description,
         questions: generatedQuestions, // send full objects
       })
   

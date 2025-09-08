@@ -59,14 +59,11 @@ export const getMySessions = async (req, res) => {
 
 export const getSessionById = async (req, res) => {
     try {
-        const session = await Session.findOne({
-            _id: req.params.id,
-            user: req.user._id
-        }).populate('questions');  //session document ke andar jo questions field hai (jo ek array of ObjectIds hai), unko actual Question documents ke saath replace kardo                                  // Iska fayda yeh hota hai ki frontend ko sirf IDs nahi, balki pure question + answer details mil jaate hain.
- if (!session) {
+        const session = await Session.findById(req.params.id).populate('questions');
+        if (!session) {
             return res.status(404).json({ 
                 success: false, 
-                message: 'Session not found or unauthorized' 
+                message: 'Session not found'
             });
         }
 

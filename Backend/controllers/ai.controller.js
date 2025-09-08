@@ -13,7 +13,9 @@ async function askAI(prompt) {
     model: "gemini-2.5-flash",
     contents: prompt,
   });
-  return response.text || "";
+  // Some SDK versions expose .text as a function
+  const text = typeof response.text === 'function' ? response.text() : response.text;
+  return text || "";
 }
 
 // --- Routes ---
@@ -28,11 +30,13 @@ export const generateInterviewQuestions = async (req, res) => {
     const rawText = await askAI(prompt);
 
     try {
-      const parsed = JSON.parse(rawText); // ✅ works directly on your sample
-      return res.status(200).json(parsed);
+      const parsed = JSON.parse(rawText);
+      // Ensure normalized shape: array of {question, answer}
+      const normalized = Array.isArray(parsed) ? parsed : Array.isArray(parsed.questions) ? parsed.questions : [];
+      return res.status(200).json(normalized);
     } catch {
       // fallback if AI ever sends non-JSON
-      return res.status(200).json({ raw: rawText });
+      return res.status(200).json([]);
     }
   } catch (err) {
     console.error("❌ Error generating questions:", err.message);

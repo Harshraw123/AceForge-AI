@@ -1,4 +1,7 @@
-export const BASE_URL = import.meta.env.VITE_API_URL || "https://ace-forge-ai-backend.vercel.app";
+export const BASE_URL =
+	typeof window !== 'undefined' && window.location.hostname === 'localhost'
+		? 'http://localhost:8000'
+		: (import.meta.env.VITE_API_URL || 'https://ace-forge-ai-backend.vercel.app');
 
 
 export const API_PATHS = {

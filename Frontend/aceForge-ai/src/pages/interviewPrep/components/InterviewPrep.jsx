@@ -17,18 +17,28 @@ const InterviewPrep = () => {
   const [expanded, setExpanded] = useState(null);
   const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchSession = async () => {
+      setLoading(true);
+      setError(null);
       try {
         const response = await axiosInstance.get(API_PATHS.SESSION.GET_ONE(sessionId));
         if (response.data.success && response.data.session) {
           setSession(response.data.session);
         } else {
+          setError('Session not found.');
           setSession(null);
         }
-      } catch {
+      } catch (e) {
+        const status = e?.response?.status;
+        if (status === 404) setError('Session not found or you do not have access.');
+        else if (status === 401) setError('Your session expired. Please log in again.');
+        else setError('Failed to load session.');
         setSession(null);
+      } finally {
+        setLoading(false);
       }
     };
     if (sessionId) fetchSession();
@@ -74,10 +84,29 @@ const InterviewPrep = () => {
     addCopyButtonsToCode();
   }, [expanded, session]);
 
-  if (!session) {
+  if (loading) {
     return (
       <DashboardLayout>
-        <div className="flex justify-center items-center min-h-[60vh] text-white">Loading session...</div>
+        <div className="flex flex-col justify-center items-center min-h-[60vh] gap-4">
+          <ClipLoader color="#f59e0b" size={36} />
+          <div className="text-white">Loading session...</div>
+        </div>
+      </DashboardLayout>
+    );
+  }
+
+  if (error) {
+    return (
+      <DashboardLayout>
+        <div className="flex flex-col items-center justify-center min-h-[60vh] text-center gap-4">
+          <div className="text-yellow-400 text-xl font-semibold">{error}</div>
+          <button
+            onClick={() => navigate('/dashboard')}
+            className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold px-6 py-2 rounded-lg shadow transition"
+          >
+            Go to Dashboard
+          </button>
+        </div>
       </DashboardLayout>
     );
   }
@@ -90,7 +119,7 @@ const InterviewPrep = () => {
     questions = [],
     createdAt,
     updatedAt,
-  } = session;
+  } = session || {};
 
   const handleLoadMore = async () => {
     setLoadingMore(true);
@@ -152,8 +181,8 @@ const InterviewPrep = () => {
       
       // Rough conversion of markdown to plain text for PDF
       const plainAnswer = q.answer
-        .replace(/\\n/g, '\n')
-        .replace(/\\t/g, '  ')
+        .replace(/\n/g, '\n')
+        .replace(/\t/g, '  ')
         .replace(/`/g, '')
         .replace(/\*\*/g, '')
         .replace(/###/g, '')
@@ -176,19 +205,13 @@ const InterviewPrep = () => {
   return (
     <DashboardLayout>
       <div className="w-full max-w-4xl mx-auto py-4 px-2 sm:py-10 sm:px-4">
-        {/* Action Buttons: Download PDF & Try Code Editor */}
+        {/* Action Buttons: Download PDF */}
         <div className="mb-6 flex flex-col sm:flex-row gap-3 sm:gap-6 justify-center sm:justify-end items-stretch sm:items-center w-full">
           <button
             onClick={handleDownloadPDF}
             className="bg-yellow-400 hover:bg-yellow-500 text-black dark:text-white font-semibold px-6 py-2 rounded-lg shadow transition w-full sm:w-auto"
           >
             Download PDF
-          </button>
-          <button
-            onClick={() => navigate('/code-editor')}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-lg shadow transition w-full sm:w-auto"
-          >
-            Try Code Editor
           </button>
         </div>
         {/* Session Details */}
@@ -250,15 +273,15 @@ const InterviewPrep = () => {
             ))}
           </div>
         </div>
-        {/* Load More and Download Buttons */}
+        {/* Load More Button */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-6">
           {error && <div className="text-red-500 mb-2 text-sm">{error}</div>}
           <button
             onClick={handleLoadMore}
             disabled={loadingMore}
-            className="bg-blue-400 hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg shadow transition disabled:opacity-60 flex items-center gap-2"
+            className="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold py-2 px-6 rounded-lg shadow transition disabled:opacity-60 flex items-center gap-2"
           >
-            {loadingMore ? <ClipLoader color="#fff" size={20} /> : 'Load More Questions'}
+            {loadingMore ? <ClipLoader color="#000" size={20} /> : 'Load More Questions'}
           </button>
         </div>
       </div>

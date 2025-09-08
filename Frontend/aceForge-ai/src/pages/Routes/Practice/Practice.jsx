@@ -30,7 +30,7 @@ function Practice() {
     };
   
     return (
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-black text-white">
         <Header
           searchTerm={searchTerm}
           onSearchChange={setSearchTerm}
@@ -62,8 +62,8 @@ function Practice() {
           
           {filteredQuestions.length === 0 && (
             <div className="text-center py-12">
-              <p className="text-muted-foreground text-lg">No problems found matching your criteria.</p>
-              <p className="text-muted-foreground text-sm mt-2">Try adjusting your search or filters.</p>
+              <p className="text-gray-400 text-lg">No problems found matching your criteria.</p>
+              <p className="text-gray-500 text-sm mt-2">Try adjusting your search or filters.</p>
             </div>
           )}
         </main>

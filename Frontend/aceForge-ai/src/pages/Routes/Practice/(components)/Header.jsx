@@ -14,17 +14,17 @@ export function Header({
   onTopicChange,
 }) {
   return (
-    <header className="sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border">
+    <header className="sticky top-0 z-50 bg-black/80 backdrop-blur border-b border-gray-800">
       <div className="container mx-auto px-4 py-4">
         {/* Logo + Title + Badge */}
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center space-x-2">
-            <Code2 className="h-8 w-8 text-primary" />
-            <h1 className="text-2xl font-bold bg-gradient-primary bg-clip-text text-transparent">
+            <Code2 className="h-8 w-8 text-yellow-400" />
+            <h1 className="text-2xl font-bold text-white">
               AlgoMaster
             </h1>
           </div>
-          <Badge variant="secondary" className="text-xs">
+          <Badge variant="secondary" className="text-xs bg-yellow-500 text-black hover:bg-yellow-400">
             15 Problems
           </Badge>
         </div>
@@ -33,18 +33,18 @@ export function Header({
         <div className="flex flex-col lg:flex-row gap-4">
           {/* Search Bar */}
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
             <Input
               placeholder="Search problems..."
               value={searchTerm}
               onChange={(e) => onSearchChange(e.target.value)}
-              className="pl-10"
+              className="pl-10 bg-gray-900 border-gray-800 text-white placeholder:text-gray-500"
             />
           </div>
 
           {/* Filters */}
           <div className="flex gap-2 items-center">
-            <Filter className="h-4 w-4 text-muted-foreground" />
+            <Filter className="h-4 w-4 text-gray-400" />
             <FilterSelect
               value={selectedDifficulty}
               onChange={onDifficultyChange}

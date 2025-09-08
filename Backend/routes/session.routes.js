@@ -9,7 +9,7 @@ const router = express.Router();
 router.post('/create', protect, createSession);
 router.get('/my-sessions', protect, getMySessions);
 router.get("/all", getAllSessions);
-router.get('/:id', protect, getSessionById);
+router.get('/:id', getSessionById);
 router.delete('/:id', protect, deleteSession);
 
 export default router

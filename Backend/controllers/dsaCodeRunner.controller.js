@@ -3,12 +3,12 @@ import axios from "axios";
 const JUDGE0_KEY = process.env.JUDGE0_API_KEY;
 const JUDGE0_API = process.env.JUDGE0_API_URL || "https://judge0-ce.p.rapidapi.com/submissions";
 
-// Judge0 language IDs (latest stable versions)
+// Judge0 language IDs (stable versions at time of writing)
 const LANGUAGE_MAP = {
-  javascript: 63, // Node.js 12.x
-  python: 71,     // Python 3.8
+  javascript: 63, // Node.js
+  python: 71,     // Python 3.x
   java: 62,       // Java 17
-  cpp: 54,        // C++ (GCC 9.2.0)
+  cpp: 54,        // C++ (GCC)
 };
 
 /**
@@ -148,6 +148,34 @@ function parseInput(inputStr) {
   return params;
 }
 
+// Deep comparison with support for unordered arrays (e.g., group anagrams)
+function normalizeForCompare(value) {
+  if (Array.isArray(value)) {
+    // If elements are arrays or objects, normalize each then sort by JSON string
+    const normalized = value.map((v) => normalizeForCompare(v));
+    const allNested = normalized.every((v) => Array.isArray(v) || (v && typeof v === 'object'));
+    if (allNested) {
+      return normalized
+        .map((v) => JSON.stringify(v))
+        .sort()
+        .map((s) => JSON.parse(s));
+    }
+    // Primitive array: sort for order-insensitive compare
+    return [...normalized].sort((a, b) => {
+      const sa = typeof a === 'string' ? a : JSON.stringify(a);
+      const sb = typeof b === 'string' ? b : JSON.stringify(b);
+      return sa.localeCompare(sb);
+    });
+  }
+  if (value && typeof value === 'object') {
+    const keys = Object.keys(value).sort();
+    const obj = {};
+    for (const k of keys) obj[k] = normalizeForCompare(value[k]);
+    return obj;
+  }
+  return value;
+}
+
 /**
  * Function to run user code against testcases using Judge0
  */
@@ -277,38 +305,36 @@ export async function runDsaCode(req, res) {
             ? submission.status.description
             : null);
 
-        // Parse expected output
-        let expectedOutput = expected;
-        if (typeof expected === 'string') {
-          if (expected.startsWith('[') && expected.endsWith(']')) {
-            try {
-              expectedOutput = JSON.parse(expected);
-            } catch (e) {
-              // Keep as string if parsing fails
-            }
-          } else if (expected === 'true' || expected === 'false') {
-            expectedOutput = expected === 'true';
-          } else if (!isNaN(expected)) {
-            expectedOutput = parseInt(expected);
-          }
-        }
+        // --- Normalize outputs for fair comparison ---
+        const normalizeValue = (val) => {
+          if (val === null || val === undefined) return null;
+          if (typeof val !== 'string') return val; // already typed
 
-        // Parse actual output
-        let actualOutput = output;
-        if (output && output.startsWith('[') && output.endsWith(']')) {
-          try {
-            actualOutput = JSON.parse(output);
-          } catch (e) {
-            // Keep as string if parsing fails
+          const trimmed = val.trim();
+
+          // JSON arrays/objects
+          if ((trimmed.startsWith('[') && trimmed.endsWith(']')) ||
+              (trimmed.startsWith('{') && trimmed.endsWith('}')) ||
+              trimmed === 'null') {
+            try { return JSON.parse(trimmed); } catch (_) { /* fallthrough */ }
           }
-        } else if (output === 'true' || output === 'false') {
-          actualOutput = output === 'true';
-        } else if (!isNaN(output)) {
-          actualOutput = parseInt(output);
-        }
+
+          // booleans
+          if (trimmed === 'true') return true;
+          if (trimmed === 'false') return false;
+
+          // numbers (int or float)
+          if (!isNaN(trimmed)) return Number(trimmed);
+
+          return trimmed; // plain string
+        };
+
+        const expectedOutput = normalizeValue(expected);
+        const actualOutput = normalizeValue(output);
 
         // Compare outputs
-        const passed = JSON.stringify(actualOutput) === JSON.stringify(expectedOutput) && !error;
+        // Order-insensitive deep compare for arrays/objects where order doesn't matter
+        const passed = JSON.stringify(normalizeForCompare(actualOutput)) === JSON.stringify(normalizeForCompare(expectedOutput)) && !error;
         if (!passed) allPassed = false;
 
         results.push({
