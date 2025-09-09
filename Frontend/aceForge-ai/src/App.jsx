@@ -71,14 +71,7 @@ const App = () => {
             } 
           />
           <Route path="/quiz/:quizId" element={<QuizInterface />} />
-          <Route 
-            path="/code-editor" 
-            element={
-              <ProtectedRoute>
-                {/* <CodeEditor /> */}
-              </ProtectedRoute>
-            } 
-          />
+          <Route path="/code-editor" element={<CodeEditor />} />
           <Route 
             path="/solve" 
             element={
