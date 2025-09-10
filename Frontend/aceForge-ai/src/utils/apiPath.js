@@ -43,5 +43,9 @@ export const API_PATHS = {
   },
   DSACodeRun: {
     Run: '/api/dsaProblems/run'
+  },
+  VAPI:{
+    MOCK_INTERVIEW:'/api/mockInterview'
   }
+
 };

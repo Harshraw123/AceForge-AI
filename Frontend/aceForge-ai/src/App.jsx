@@ -13,6 +13,9 @@ import CodeEditor from  './pages/Home/CodeEditor'
 import Practice from './pages/Routes/Practice/Practice'
 import Solve from './pages/Routes/Practice/Solve'
 
+import InterviewForm from './pages/Routes/mockInterview/InterviewForm'
+import StartInterview from './pages/Routes/mockInterview/StartInterview'
+
 // Protected route component
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, loading } = useContext(UserContext);
@@ -85,6 +88,24 @@ const App = () => {
             element={
               <ProtectedRoute>
                 <Solve/>
+              </ProtectedRoute>
+            } 
+          />
+
+<Route 
+            path="/interview-form" 
+            element={
+              <ProtectedRoute>
+                <InterviewForm/>
+              </ProtectedRoute>
+            } 
+          />
+          
+<Route 
+            path="/mock-interview/:id" 
+            element={
+              <ProtectedRoute>
+                <StartInterview/>
               </ProtectedRoute>
             } 
           />

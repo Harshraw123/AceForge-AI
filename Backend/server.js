@@ -2,7 +2,6 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import connectDB from './config/db.js';
-
 import authRoutes from './routes/auth.routes.js';
 import sessionRoutes from './routes/session.routes.js';
 import questionRoutes from './routes/question.routes.js';
@@ -12,6 +11,7 @@ import codeRoutes from './routes/code.routes.js';
 import aiReview from  './routes/aiReview.routes.js'
 import dsaProblems from './routes/dsaProblems.route.js'
 import runDsaCode from './routes/runDsaCode.js'
+import mockInterview from './routes/mockInterview.js'
 
 
 dotenv.config();
@@ -56,6 +56,7 @@ app.use("/api/code", codeRoutes);
 app.use('/api/review',aiReview)
 app.use('/api/problems',dsaProblems)
 app.use('/api/dsaProblems',runDsaCode)
+app.use('/api/mockInterview', mockInterview)
 
 
 app.get('/', (req, res) => {
