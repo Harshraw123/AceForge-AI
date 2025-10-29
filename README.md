@@ -18,6 +18,14 @@
 - 📄 **Download Session PDFs**  
   Save your Q&A sets for later revision or offline prep.
 
+  
+  - 📄 **Dsa Practicde(top company problems) in testing and beta not complete yet**  
+    prepare Comapny wise DSA questions
+
+      
+  - 📄 **Voice agent for mock interview in testing and beta not complete yet**  
+   practice real time interview sessions
+
 ---
 
 ### 🛠️ Built With
@@ -28,5 +36,6 @@
 - **AI:** Gemini / OpenAI  
 - **Code Editor:** Monaco + Judge0  
 - **PDF Export:** jsPDF
+- **Vapi Voice Agents
 
 --
