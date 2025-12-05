@@ -1,32 +1,60 @@
 # ⚡ AceForge AI
 
-**AceForge AI** is your smart AI-powered companion for mastering tech interviews, writing better code, and testing your skills through quizzes — all in one place.
+**AceForge AI** is your intelligent, AI-powered companion for mastering tech interviews, improving coding skills, and testing your knowledge through interactive quizzes — all in one platform.
 
 ---
 
-### 🚀 What You Can Do
+## 🚀 What You Can Do
 
 - 🔍 **Generate Interview Questions**  
-  Tailored to your role, experience, and tech stack.
+  Get role-based, experience-level, and tech stack–specific interview questions.
 
 - 💡 **Practice in an AI Code Editor**  
-  Get suggestions, debug code, and learn as you go.
+  Write and debug code with real-time AI suggestions and explanations.
 
 - 🧠 **Take Smart Quizzes**  
-  Auto-generated quizzes that adapt to your learning curve.
+  Adaptive quizzes that adjust to your learning curve and performance.
 
 - 📄 **Download Session PDFs**  
-  Save your Q&A sets for later revision or offline prep.
+  Save your Q&A sets or code sessions for offline preparation and revision.
+
+- ⚙️ **DSA Practice (Top Company Problems)** *(Beta)*  
+  Prepare for coding interviews with company-wise DSA problem sets.  
+  *(Currently in testing phase.)*
+
+- 🗣️ **AI Voice Agent for Mock Interviews** *(Beta)*  
+  Simulate real-time interview sessions with an AI interviewer.  
+  *(Currently in testing phase.)*
 
 ---
 
-### 🛠️ Built With
+## 🛠️ Built With
 
 - **Frontend:** React, TailwindCSS  
 - **Backend:** Node.js, Express  
 - **Database:** MongoDB Atlas  
-- **AI:** Gemini / OpenAI  
+- **AI Models:** Gemini / OpenAI  
 - **Code Editor:** Monaco + Judge0  
-- **PDF Export:** jsPDF
+- **PDF Export:** jsPDF  
+- **Voice Agents:** Vapi  
 
---
+---
+
+## 🌟 Upcoming Features
+
+- 🔔 Real-time leaderboard for quiz performance  
+- 🧩 Personalized learning roadmap  
+- 💬 AI-powered coding mentor chat  
+- 📱 Mobile app version (coming soon)
+
+---
+
+## 🤝 Contributing
+
+Contributions, issues, and feature requests are welcome!  
+Feel free to fork this repo and submit a pull request.
+
+---
+
+
+
