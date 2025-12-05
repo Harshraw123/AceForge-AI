@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken';
+import { jwtVerify } from 'jose';
 import User from '../models/User.model.js';
 
 
@@ -8,11 +8,12 @@ const protect = async (req, res, next) => {
 
  
     if (token && token.startsWith("Bearer ")) {
-      const decoded = jwt.verify(token.split(" ")[1], process.env.JWT_SECRET);
+      const secret = new TextEncoder().encode(process.env.JWT_SECRET);
+      const { payload } = await jwtVerify(token.split(" ")[1], secret);
 
       // Attach the user to the request (excluding password)
       //ye line boht imp hai req.user almost har jagh use hoga
-      req.user = await User.findById(decoded.id).select("-password");
+      req.user = await User.findById(payload.id).select("-password");
 
       return next();
     } else {

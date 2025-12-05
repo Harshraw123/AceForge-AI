@@ -1,6 +1,6 @@
 import User from '../models/User.model.js'
 import bcrypt from 'bcrypt'
-import jwt from 'jsonwebtoken'
+import { SignJWT } from 'jose'
 
 
 //Generate Jwt Token
@@ -8,13 +8,12 @@ import jwt from 'jsonwebtoken'
 
 
 
-   export  const generateToken=(userId)=>{
-    return jwt.sign({id:userId},
-        process.env.JWT_SECRET,
-        {
-            expiresIn:'7d'
-        }
-    )
+   export  const generateToken=async (userId)=>{
+    const secret = new TextEncoder().encode(process.env.JWT_SECRET);
+    return await new SignJWT({ id: userId.toString() })
+        .setProtectedHeader({ alg: 'HS256' })
+        .setExpirationTime('7d')
+        .sign(secret);
 };
 
  
@@ -46,7 +45,7 @@ export const registerUser = async (req, res) => {
       res.status(200).json({
         success: true,
         message: "User registered successfully",
-        token: generateToken(user._id),
+        token: await generateToken(user._id),
         id: user._id,
         fullName: user.fullName,
         email: user.email,
@@ -94,7 +93,7 @@ export const registerUser = async (req, res) => {
       res.status(200).json({
         success: true,
         message: 'User logged in successfully',
-        token: generateToken(user._id),
+        token: await generateToken(user._id),
         _id: user._id,
         fullName: user.fullName,
         email: user.email,
