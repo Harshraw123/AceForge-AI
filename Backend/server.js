@@ -11,7 +11,7 @@ import codeRoutes from './routes/code.routes.js';
 import aiReview from  './routes/aiReview.routes.js'
 import dsaProblems from './routes/dsaProblems.route.js'
 import runDsaCode from './routes/runDsaCode.js'
-import mockInterview from './routes/mockInterview.js'
+// Removed mock interview route
 
 
 dotenv.config();
@@ -56,7 +56,7 @@ app.use("/api/code", codeRoutes);
 app.use('/api/review',aiReview)
 app.use('/api/problems',dsaProblems)
 app.use('/api/dsaProblems',runDsaCode)
-app.use('/api/mockInterview', mockInterview)
+// app.use('/api/mockInterview', mockInterview)
 
 
 app.get('/', (req, res) => {

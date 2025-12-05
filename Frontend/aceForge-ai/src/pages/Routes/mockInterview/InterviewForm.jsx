@@ -7,13 +7,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { toast } from 'react-hot-toast';
 import { FaRobot } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-import { API_PATHS } from '@/utils/apiPath';
-import axiosInstance from '@/utils/axiosInstance';
+import { v4 as uuidv4 } from 'uuid';
 
-
-
-
-
+// AI Interviewers (mapped with agentId from Vapi dashboard)
 const interviewers = [
   { id: 'Hmz0MdhDqv9vPpSMfDkh', name: 'Rakesh Thakur', specialty: 'System Design & Algorithms' },
   { id: 'rKEZ4zwQvgkCKHp8yR8n', name: 'Jessica', specialty: 'Senior Full Stack Developer' },
@@ -35,9 +31,8 @@ const InterviewForm = () => {
   });
   const navigate=useNavigate();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-  
     
     if (!formData.topic || !formData.experience || !formData.interviewer) {
       toast.error("Please fill in all required fields");
@@ -46,33 +41,22 @@ const InterviewForm = () => {
 
     const selectedInterviewer = interviewers.find(int => int.id === formData.interviewer);
     
-    try{
-      const response = await axiosInstance.post(API_PATHS.VAPI.MOCK_INTERVIEW,{
+    const interviewId = uuidv4(); // unique dynamic id
+    
+    toast.success(`Starting ${formData.topic} interview with ${selectedInterviewer?.name || 'AI Interviewer'}`);
+    
+    navigate(`/mock-interview/${interviewId}`, {
+      state: {
         topic: formData.topic,
         experience: formData.experience,
-        agentID: formData.interviewer,
-        agentName: selectedInterviewer?.name,
-      });
-
-      if (response.data.success && response.data.assistantId) {
-        toast.success(`Your ${formData.topic} interview with ${selectedInterviewer?.name || 'AI Interviewer'} has been set up.`);
-        navigate(`/mock-interview/${response.data.assistantId}`);
-      } else {
-        toast.error('Failed to create interview session');
+        interviewer: formData.interviewer, // Vapi agentId
       }
-    }catch(err){
-      toast.error(err?.response?.data?.error || 'Failed to start mock interview');
-      return;
-    }
-    
-
-
-
+    });
   };
 
   return (
     <div className="min-h-screen bg-black flex">
-      {/* Left Side - Professional Image */}
+      {/* Left Side - Image */}
       <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden">
         <img 
           src="/form.avif" 
@@ -101,7 +85,7 @@ const InterviewForm = () => {
 
           <CardContent className="space-y-6">
             <div className="space-y-6">
-              {/* Topic Field */}
+              {/* Topic */}
               <div className="space-y-2">
                 <Label htmlFor="topic" className="text-white font-semibold text-base">
                   Interview Topic *
@@ -116,7 +100,7 @@ const InterviewForm = () => {
                 />
               </div>
 
-              {/* Experience Level */}
+              {/* Experience */}
               <div className="space-y-2">
                 <Label htmlFor="experience" className="text-white font-semibold text-base">
                   Experience Level *
@@ -127,11 +111,7 @@ const InterviewForm = () => {
                   </SelectTrigger>
                   <SelectContent className="bg-zinc-800 border-zinc-700">
                     {experienceLevels.map((level) => (
-                      <SelectItem 
-                        key={level} 
-                        value={level}
-                        className="text-white focus:bg-zinc-700 focus:text-yellow-400"
-                      >
+                      <SelectItem key={level} value={level} className="text-white focus:bg-zinc-700 focus:text-yellow-400">
                         {level}
                       </SelectItem>
                     ))}
@@ -139,7 +119,7 @@ const InterviewForm = () => {
                 </Select>
               </div>
 
-              {/* Interviewer Selection */}
+              {/* Interviewer */}
               <div className="space-y-2">
                 <Label htmlFor="interviewer" className="text-white font-semibold text-base">
                   Choose Your AI Interviewer *
@@ -150,11 +130,7 @@ const InterviewForm = () => {
                   </SelectTrigger>
                   <SelectContent className="bg-zinc-800 border-zinc-700">
                     {interviewers.map((interviewer) => (
-                      <SelectItem 
-                        key={interviewer.id} 
-                        value={interviewer.id}
-                        className="text-white focus:bg-zinc-700 focus:text-yellow-400"
-                      >
+                      <SelectItem key={interviewer.id} value={interviewer.id} className="text-white focus:bg-zinc-700 focus:text-yellow-400">
                         <div className="flex flex-col items-start">
                           <span className="font-medium">{interviewer.name}</span>
                           <span className="text-sm text-zinc-400">{interviewer.specialty}</span>
@@ -165,23 +141,13 @@ const InterviewForm = () => {
                 </Select>
               </div>
 
-              {/* Submit Button */}
+              {/* Submit */}
               <Button
                 onClick={handleSubmit}
                 className="w-full bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-black font-semibold h-12 text-base transition-all duration-200 shadow-lg hover:shadow-yellow-500/25"
               >
                 Start AI Interview Session
               </Button>
-            </div>
-
-            {/* Additional Info */}
-            <div className="mt-8 p-4 bg-zinc-800 rounded-lg border border-zinc-700">
-              <h3 className="text-yellow-400 font-semibold mb-2">What to expect:</h3>
-              <ul className="text-zinc-300 text-sm space-y-1">
-                <li>• Personalized questions based on your topic and experience</li>
-                <li>• Real-time feedback and suggestions</li>
-                <li>• Detailed performance report after completion</li>
-              </ul>
             </div>
           </CardContent>
         </Card>
